@@ -1,0 +1,10 @@
+metadata:
+  url: https://github.com/sapcc/mutavault
+
+binaries:
+  - name:        mutavault
+    fromPackage: .
+    installTo:   bin/
+
+golangciLint:
+  createConfig: true
