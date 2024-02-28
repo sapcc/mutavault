@@ -1,6 +1,6 @@
 module github.com/sapcc/mutavault
 
-go 1.22.0
+go 1.22
 
 require (
 	github.com/hashicorp/vault/api v1.12.0
