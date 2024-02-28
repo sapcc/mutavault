@@ -27,6 +27,7 @@ import (
 	"strings"
 
 	"github.com/hashicorp/vault/api"
+	"github.com/sapcc/go-bits/vault"
 	"github.com/urfave/cli/v2"
 )
 
@@ -111,27 +112,8 @@ func main() {
 	}
 }
 
-func makeClient() (*api.Client, error) {
-	vaultAddr, ok := os.LookupEnv("VAULT_ADDR")
-	if !ok {
-		return nil, errors.New("VAULT_ADDR not set")
-	}
-	vaultToken, ok := os.LookupEnv("VAULT_TOKEN")
-	if !ok {
-		return nil, errors.New("VAULT_TOKEN not set")
-	}
-	cfg := api.DefaultConfig()
-	cfg.Address = vaultAddr
-	client, err := api.NewClient(cfg)
-	if err != nil {
-		return nil, err
-	}
-	client.SetToken(vaultToken)
-	return client, nil
-}
-
 func listall(ctx *cli.Context) error {
-	client, err := makeClient()
+	client, err := vault.CreateClient()
 	if err != nil {
 		return err
 	}
@@ -204,7 +186,7 @@ func interfaceSliceToStringSlice(s []interface{}) ([]string, error) {
 }
 
 func getcustommetas(ctx *cli.Context) error {
-	client, err := makeClient()
+	client, err := vault.CreateClient()
 	if err != nil {
 		return err
 	}
@@ -224,7 +206,7 @@ func getcustommetas(ctx *cli.Context) error {
 }
 
 func setcustommetas(ctx *cli.Context) error {
-	client, err := makeClient()
+	client, err := vault.CreateClient()
 	if err != nil {
 		return err
 	}
