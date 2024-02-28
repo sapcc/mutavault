@@ -4,6 +4,7 @@ go 1.22
 
 require (
 	github.com/hashicorp/vault/api v1.12.0
+	github.com/sapcc/go-bits v0.0.0-20240228144307-33e57b5c94fb
 	github.com/urfave/cli/v2 v2.27.1
 )
 
@@ -25,8 +26,8 @@ require (
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/ryanuber/go-glob v1.0.0 // indirect
 	github.com/xrash/smetrics v0.0.0-20201216005158-039620a65673 // indirect
-	golang.org/x/crypto v0.17.0 // indirect
-	golang.org/x/net v0.17.0 // indirect
+	golang.org/x/crypto v0.18.0 // indirect
+	golang.org/x/net v0.20.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
-	golang.org/x/time v0.0.0-20200416051211-89c76fbcd5d1 // indirect
+	golang.org/x/time v0.3.0 // indirect
 )
