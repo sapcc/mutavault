@@ -128,9 +128,7 @@ func listall(ctx *cli.Context) error {
 	return nil
 }
 
-// TODO: parallelize requests
 func listSecretDirRecurse(ctx context.Context, queue *LimitedQueue[*api.Secret], client *api.Client, mount, path string) ([]string, error) {
-	fmt.Print(".")
 	subPaths, err := listSecretDir(ctx, queue, client, mount, path)
 	if err != nil {
 		return nil, err
