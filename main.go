@@ -25,6 +25,7 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"sync"
 
 	"github.com/hashicorp/vault/api"
 	"github.com/sapcc/go-bits/vault"
@@ -133,20 +134,39 @@ func listSecretDirRecurse(ctx context.Context, queue *LimitedQueue[*api.Secret],
 	if err != nil {
 		return nil, err
 	}
-	result := make([]string, 0)
+
+	result := make([]Result[[]string], 0)
+	var mutex sync.Mutex
+	var wg sync.WaitGroup
+
 	for _, subPath := range subPaths {
 		next := path + subPath
 		if !strings.HasSuffix(next, "/") {
-			result = append(result, next)
+			result = append(result, Result[[]string]{value: []string{next}})
 			continue
 		}
-		subSecrets, err := listSecretDirRecurse(ctx, queue, client, mount, next)
-		if err != nil {
-			return nil, err
-		}
-		result = append(result, subSecrets...)
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			subSecrets, err := listSecretDirRecurse(ctx, queue, client, mount, next)
+			mutex.Lock()
+			defer mutex.Unlock()
+			if err != nil {
+				result = append(result, Result[[]string]{value: nil, err: err})
+				return
+			}
+			result = append(result, Result[[]string]{value: subSecrets})
+		}()
 	}
-	return result, nil
+	wg.Wait()
+	resultPaths := make([]string, 0)
+	for _, r := range result {
+		if r.err != nil {
+			return nil, r.err
+		}
+		resultPaths = append(resultPaths, r.value...)
+	}
+	return resultPaths, nil
 }
 
 func listSecretDir(ctx context.Context, queue *LimitedQueue[*api.Secret], client *api.Client, mount, path string) ([]string, error) {
