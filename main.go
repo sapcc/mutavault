@@ -30,45 +30,12 @@ import (
 	"github.com/hashicorp/vault/api"
 	"github.com/sapcc/go-bits/vault"
 	"github.com/urfave/cli/v2"
+	"golang.org/x/sync/semaphore"
 )
 
 type Result[T any] struct {
 	value T
 	err   error
-}
-
-type LimitedQueue[T any] struct {
-	channel chan func()
-}
-
-func NewLimitedQueue[T any](ctx context.Context, concurrency int) LimitedQueue[T] {
-	queue := LimitedQueue[T]{channel: make(chan func())}
-	work := func() {
-		for {
-			select {
-			case f := <-queue.channel:
-				f()
-			case <-ctx.Done():
-				return
-			}
-		}
-	}
-	for range concurrency {
-		go work()
-	}
-	return queue
-}
-
-func (queue *LimitedQueue[T]) Do(f func() (T, error)) (T, error) {
-	out := make(chan Result[T])
-	work := func() {
-		val, err := f()
-		result := Result[T]{value: val, err: err}
-		out <- result
-	}
-	queue.channel <- work
-	result := <-out
-	return result.value, result.err
 }
 
 func main() {
@@ -118,8 +85,8 @@ func listall(ctx *cli.Context) error {
 	if err != nil {
 		return err
 	}
-	queue := NewLimitedQueue[*api.Secret](ctx.Context, 10)
-	result, err := listSecretDirRecurse(ctx.Context, &queue, client, ctx.String("mount"), "/")
+	sema := semaphore.NewWeighted(10)
+	result, err := listSecretDirRecurse(ctx.Context, sema, client, ctx.String("mount"), "/")
 	if err != nil {
 		return err
 	}
@@ -129,8 +96,8 @@ func listall(ctx *cli.Context) error {
 	return nil
 }
 
-func listSecretDirRecurse(ctx context.Context, queue *LimitedQueue[*api.Secret], client *api.Client, mount, path string) ([]string, error) {
-	subPaths, err := listSecretDir(ctx, queue, client, mount, path)
+func listSecretDirRecurse(ctx context.Context, sema *semaphore.Weighted, client *api.Client, mount, path string) ([]string, error) {
+	subPaths, err := listSecretDir(ctx, sema, client, mount, path)
 	if err != nil {
 		return nil, err
 	}
@@ -148,7 +115,7 @@ func listSecretDirRecurse(ctx context.Context, queue *LimitedQueue[*api.Secret],
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			subSecrets, err := listSecretDirRecurse(ctx, queue, client, mount, next)
+			subSecrets, err := listSecretDirRecurse(ctx, sema, client, mount, next)
 			mutex.Lock()
 			defer mutex.Unlock()
 			if err != nil {
@@ -169,10 +136,12 @@ func listSecretDirRecurse(ctx context.Context, queue *LimitedQueue[*api.Secret],
 	return resultPaths, nil
 }
 
-func listSecretDir(ctx context.Context, queue *LimitedQueue[*api.Secret], client *api.Client, mount, path string) ([]string, error) {
-	data, err := queue.Do(func() (*api.Secret, error) {
-		return client.Logical().ListWithContext(ctx, fmt.Sprintf("%s/metadata/%s", mount, path))
-	})
+func listSecretDir(ctx context.Context, sema *semaphore.Weighted, client *api.Client, mount, path string) ([]string, error) {
+	if err := sema.Acquire(ctx, 1); err != nil {
+		return nil, err
+	}
+	data, err := client.Logical().ListWithContext(ctx, fmt.Sprintf("%s/metadata/%s", mount, path))
+	sema.Release(1)
 	if err != nil {
 		return nil, fmt.Errorf("failed to list keys in %s: %w", path, err)
 	}
