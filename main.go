@@ -142,6 +142,11 @@ func listSecretDir(ctx context.Context, sema *semaphore.Weighted, client *api.Cl
 	}
 	data, err := client.Logical().ListWithContext(ctx, fmt.Sprintf("%s/metadata/%s", mount, path))
 	sema.Release(1)
+	var respError *api.ResponseError
+	if errors.As(err, &respError) && respError.StatusCode == 403 {
+		fmt.Fprintf(os.Stderr, "access to %s is forbidden\n", path)
+		return []string{}, nil
+	}
 	if err != nil {
 		return nil, fmt.Errorf("failed to list keys in %s: %w", path, err)
 	}
