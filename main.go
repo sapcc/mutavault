@@ -33,6 +33,8 @@ import (
 	"golang.org/x/sync/semaphore"
 )
 
+const concurrency int64 = 10
+
 type Result[T any] struct {
 	value T
 	err   error
@@ -85,7 +87,7 @@ func listall(ctx *cli.Context) error {
 	if err != nil {
 		return err
 	}
-	sema := semaphore.NewWeighted(10)
+	sema := semaphore.NewWeighted(concurrency)
 	result, err := listSecretDirRecurse(ctx.Context, sema, client, ctx.String("mount"), "/")
 	if err != nil {
 		return err
@@ -182,17 +184,42 @@ func getcustommetas(ctx *cli.Context) error {
 	if err != nil {
 		return err
 	}
-	customMetas := make([]map[string]any, 0)
+	result := make([]Result[map[string]any], 0)
+	var mutex sync.Mutex
+	var wg sync.WaitGroup
+	sema := semaphore.NewWeighted(concurrency)
+
 	for _, path := range ctx.Args().Slice() {
-		meta, err := client.KVv2(ctx.String("mount")).GetMetadata(ctx.Context, path)
-		if err != nil {
-			return err
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			if err := sema.Acquire(ctx.Context, 1); err != nil {
+				result = append(result, Result[map[string]any]{err: err})
+				return
+			}
+			meta, err := client.KVv2(ctx.String("mount")).GetMetadata(ctx.Context, path)
+			sema.Release(1)
+			mutex.Lock()
+			defer mutex.Unlock()
+			if err != nil {
+				result = append(result, Result[map[string]any]{err: err})
+				return
+			}
+			if meta.CustomMetadata == nil {
+				meta.CustomMetadata = make(map[string]any)
+			}
+			meta.CustomMetadata["path"] = path
+			result = append(result, Result[map[string]any]{value: meta.CustomMetadata})
+		}()
+	}
+
+	wg.Wait()
+	customMetas := make([]map[string]any, 0)
+	for _, r := range result {
+		if r.err != nil {
+			return r.err
 		}
-		if meta.CustomMetadata == nil {
-			meta.CustomMetadata = make(map[string]interface{})
-		}
-		meta.CustomMetadata["path"] = path
-		customMetas = append(customMetas, meta.CustomMetadata)
+		customMetas = append(customMetas, r.value)
 	}
 	return json.NewEncoder(os.Stdout).Encode(customMetas)
 }
