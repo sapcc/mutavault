@@ -8,3 +8,11 @@ binaries:
 
 golangciLint:
   createConfig: true
+
+githubWorkflow:
+  global:
+    defaultBranch: master
+  license:
+    enabled: true
+  securityChecks:
+    enabled: true
