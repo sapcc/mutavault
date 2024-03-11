@@ -9,7 +9,8 @@ make
 ```
 
 ## Usage
-The vault address and token are read from the `VAULT_ADDR` and `VAULT_TOKEN` environment variables respectively.
+The vault address is read from `VAULT_ADDR` the environment variable respectively.
+The token is read from the `VAULT_TOKEN` the environment variable or the `~/.vault-token` file created by `vault login`.
 
 ### kv
 The `kv` subcommand interacts with a kvv2 engine.
