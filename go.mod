@@ -3,7 +3,7 @@ module github.com/sapcc/mutavault
 go 1.22
 
 require (
-	github.com/hashicorp/vault/api v1.12.0
+	github.com/hashicorp/vault/api v1.12.1
 	github.com/sapcc/go-bits v0.0.0-20240308115612-9f5044052357
 	github.com/urfave/cli/v2 v2.27.1
 	golang.org/x/sync v0.6.0
