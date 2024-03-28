@@ -75,6 +75,8 @@ github.com/sapcc/go-bits v0.0.0-20240314001344-7f456a38d82a h1:GzUSt4J0CUe2V+mLn
 github.com/sapcc/go-bits v0.0.0-20240314001344-7f456a38d82a/go.mod h1:x+3zq1uoBe4pnCLvBvlAZLuZOdz8ImGS97YG/B7d3wE=
 github.com/sapcc/go-bits v0.0.0-20240321130422-af7405f5e67d h1:dwbfHnUNSep0RLJL86dkuY/4JSZGMedqG1CzVWWuMZc=
 github.com/sapcc/go-bits v0.0.0-20240321130422-af7405f5e67d/go.mod h1:9AD0qbmtyVApQezhUx7pUuExUcl2kSjB/WSMcPGo6f8=
+github.com/sapcc/go-bits v0.0.0-20240328092936-0e0b562825d4 h1:McWSE2OxvmMIxI6y1udn7AxJEZ6Ze5FS59nTbIMcTDk=
+github.com/sapcc/go-bits v0.0.0-20240328092936-0e0b562825d4/go.mod h1:MfdlJwxZa92nnBfg5LvfR7F6HGxTe9N1N5K+EB09kEg=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/testify v1.2.2/go.mod h1:a8OnRcib4nhh0OaRAV+Yts87kKdq0PP7pXfy6kDkUVs=
 github.com/stretchr/testify v1.7.0/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=
