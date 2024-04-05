@@ -6,7 +6,7 @@ require (
 	github.com/hashicorp/vault/api v1.12.2
 	github.com/sapcc/go-bits v0.0.0-20240328092936-0e0b562825d4
 	github.com/urfave/cli/v2 v2.27.1
-	golang.org/x/sync v0.6.0
+	golang.org/x/sync v0.7.0
 )
 
 require (
