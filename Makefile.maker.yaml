@@ -10,5 +10,10 @@ golangciLint:
   createConfig: true
 
 githubWorkflow:
+  ci:
+    enabled: true
   global:
     defaultBranch: master
+
+renovate:
+  enabled: true
