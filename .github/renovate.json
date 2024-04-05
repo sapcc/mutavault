@@ -5,6 +5,10 @@
     "mergeConfidence:all-badges",
     "docker:disable"
   ],
+  "assignees": [
+    "Nuckal777",
+    "SuperSandro2000"
+  ],
   "commitMessageAction": "Renovate: Update",
   "constraints": {
     "go": "1.22"
