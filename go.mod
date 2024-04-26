@@ -3,8 +3,8 @@ module github.com/sapcc/mutavault
 go 1.22
 
 require (
-	github.com/hashicorp/vault/api v1.12.2
-	github.com/sapcc/go-bits v0.0.0-20240418035538-c509bd89fb1a
+	github.com/hashicorp/vault/api v1.13.0
+	github.com/sapcc/go-bits v0.0.0-20240425084953-de3210f2772e
 	github.com/urfave/cli/v2 v2.27.1
 	golang.org/x/sync v0.7.0
 )
@@ -12,7 +12,7 @@ require (
 require (
 	github.com/cenkalti/backoff/v3 v3.0.0 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.2 // indirect
-	github.com/go-jose/go-jose/v3 v3.0.3 // indirect
+	github.com/go-jose/go-jose/v4 v4.0.1 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-cleanhttp v0.5.2 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
