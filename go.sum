@@ -62,8 +62,8 @@ github.com/russross/blackfriday/v2 v2.1.0/go.mod h1:+Rmxgy9KzJVeS9/2gXHxylqXiyQD
 github.com/ryanuber/columnize v2.1.0+incompatible/go.mod h1:sm1tb6uqfes/u+d4ooFouqFdy9/2g9QGwK3SQygK0Ts=
 github.com/ryanuber/go-glob v1.0.0 h1:iQh3xXAumdQ+4Ufa5b25cRpC5TYKlno6hsv6Cb3pkBk=
 github.com/ryanuber/go-glob v1.0.0/go.mod h1:807d1WSdnB0XRJzKNil9Om6lcp/3a0v4qIHxIXzX/Yc=
-github.com/sapcc/go-bits v0.0.0-20240725082021-261f0bf53c79 h1:+UVZQpUPdlDoKyiAQ5SgvE/zxQ1AF/hlan+wD8V1Qqg=
-github.com/sapcc/go-bits v0.0.0-20240725082021-261f0bf53c79/go.mod h1:AWYXw+xIyaouPyJj6s1M66t/Txw0r0ft6X5Pgljg/R0=
+github.com/sapcc/go-bits v0.0.0-20240801093859-8ef04d19f38d h1:J6hg859uZMKn3aEQhEZBdUMXvbKIl3I7t7kNM4qeOps=
+github.com/sapcc/go-bits v0.0.0-20240801093859-8ef04d19f38d/go.mod h1:GDqhmlHFdWGzbJlpNinE2f21GOvOKe5tt2N1rOix4I0=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/testify v1.7.0/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=
 github.com/stretchr/testify v1.8.4 h1:CcVxjf3Q8PM0mHUKJCdn+eZZtm5yQwehR5yeSVQQcUk=
