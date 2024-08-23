@@ -4,7 +4,7 @@ go 1.22
 
 require (
 	github.com/hashicorp/vault/api v1.14.0
-	github.com/sapcc/go-bits v0.0.0-20240815085238-fce0691187a2
+	github.com/sapcc/go-bits v0.0.0-20240822124354-41dc601581db
 	github.com/urfave/cli/v2 v2.27.4
 	golang.org/x/sync v0.8.0
 )
